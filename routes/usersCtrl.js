@@ -108,7 +108,7 @@ module.exports = {
                   done(null, userFound, resBycrypt);
                 });
               } else {
-                return res.render('login.ejs',{ error: 'user not exist in DB' });
+                return res.render('login.ejs',{ error: 'user not exist' });
               }
             },
             function(userFound, resBycrypt, done) {

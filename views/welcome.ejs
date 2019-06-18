@@ -1,4 +1,75 @@
-<h1>Welcome</h1>
-<iframe src="https://fr.euronews.com/embed/timeline" scrolling="no" frameborder="0" style="min-height:425px; width:100%; height:100%;"></iframe>
-<iframe src="//fr.euronews.com/embed/meteo/europe/france/paris" scrolling="no" frameborder="0" style="min-height:570px; width:100%; height:100%;"></iframe>
-<iframe src="https://embed.waze.com/iframe?zoom=15&lat=48.856614&lon=2.352222&ct=livemap" width="600" height="450" allowfullscreen></iframe>
+<!doctype html>
+<html>
+<head>
+	<title>Welcome To Rocket</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        #btnOut{
+            float: right;
+            margin-right: 10px;
+        }
+        #statut{
+            width: 50%;
+            margin-left: 15%;
+        }
+        #barre{
+            background-color: rgb(156, 247, 247);
+            width: 180px;
+            height: 200px;
+            margin-top: 30px;
+            margin-left: 30px;
+        }
+        #barre iframe{
+            text-align: center;
+        }
+        #footer{
+            background-color: rgb(197, 197, 255);
+            text-align: center;
+            padding: 20px;
+        }
+        #footer form h1{
+            margin: 30px;
+        }
+        .email-box{
+            margin-bottom: 30px;
+        }
+        #barre, #statut{
+            display: inline-block;
+        }
+        #actualités iframe{
+            margin-top: 80px;
+            display: block;
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/"  id="btnOut"><button type="submit" class="btn btn-warning btn-lg" style="margin-top: 20px;" ><span class="fa fa-sign-out"></span> Logout</button></a>
+    <div id="barre">
+        <img src="images/user.png">
+        <!-- <iframe src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=small&timezone=Europe%2FParis"   frameborder="0"></iframe>  -->
+        <IFRAME src="http://www.Heure.com/heure-fr.php?timezone=2&size=24"  BORDER="0" HSPACE="0" VSPACE="0" FRAMEBORDER="0" SCROLLING="no"> </IFRAME>
+    </div>
+    <div id="statut">
+        <textarea class="form-control" rows="3" id="comment" style="resize: none;"></textarea>
+        <button class="btn btn-default btn-lg" style="float: right; margin-top:30px;"><span class="fa fa-paper-plane"></span> Send</button>
+    </div>
+    <div id="actualités">
+    <iframe src="https://fr.euronews.com/embed/timeline" scrolling="no" frameborder="0" style="min-height:425px; width:100%; height:100%;"></iframe>
+    <iframe src="//fr.euronews.com/embed/meteo/europe/france/paris" scrolling="no" frameborder="0" style="min-height:570px; width:100%; height:100%;"></iframe>
+    <iframe src="https://embed.waze.com/iframe?zoom=15&lat=48.856614&lon=2.352222&ct=livemap" width="600" height="450" allowfullscreen></iframe>
+    </div>
+    <div id="footer">
+        
+        <form>
+            <h1>Join Our Newsletter</h1>
+            <div class="email-box">
+                <i class="fa fa-envelope"></i>
+                <input class="tbox" type="email" name="email" placeholder="Enter your email">
+                <button class="btn" type="button" name="button">Subscribe</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
