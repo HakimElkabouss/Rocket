@@ -13,10 +13,13 @@ module.exports = {
         var email = req.body.email;
         var username = req.body.username;
         var password = req.body.password;
-        var bio = req.body.bio;
+        var ConfirmPassword = req.body.ConfirmPassword;
 
-        if(email == null || username == null || password == null){
+        if(email == null || username == null || password == null || ConfirmPassword == null){
             return res.render('register.ejs',{error: 'missing parameters'});
+        }
+        if(password != ConfirmPassword){
+          return res.render('register.ejs',{error: 'you have cheated on the password confirmation'});
         }
         if(username.length >= 13 || username.length <= 4){
             return res.render('register.ejs',{error: 'wrong username (must be length (5 - 12))'});
@@ -62,7 +65,6 @@ module.exports = {
                 email: email,
                 username: username,
                 password: bcryptedPassword,
-                bio: bio,
                 isAdmin: 0
               })
               .then(function(newUser) {
@@ -126,6 +128,10 @@ module.exports = {
             }
       });
     },
+      logout : function(req, res){
+          res.render('index.ejs')
+      },
+      
     getUserProfile : function(req, res){
         // récupérer en-tete de l'authorisation
         var headerAuth = req.headers['authorization'];
@@ -135,7 +141,7 @@ module.exports = {
             return res.status(400).json({'error': 'wrong token'});
 
             models.User.findOne({
-                attributes: [ 'id', 'email', 'username', 'bio' ],
+                attributes: [ 'id', 'email', 'username' ],
                 where: { id: userId }
               }).then(function(user) {
                 if (user) {
@@ -148,50 +154,50 @@ module.exports = {
           });
     
     },
-    updateUserProfile: function(req, res){
-        // récupérer en-tete de l'authorisation
-        var headerAuth = req.headers['authorization'];
-        var userId = jwtUtils.getUserId(headerAuth);
+    // updateUserProfile: function(req, res){
+    //     // récupérer en-tete de l'authorisation
+    //     var headerAuth = req.headers['authorization'];
+    //     var userId = jwtUtils.getUserId(headerAuth);
 
-        // params
-        var bio = req.body.bio;
+    //     // params
+    //     var bio = req.body.bio;
 
-        // Waterfall permet de simplifier les choses (optionnel)
-        asyncLib.waterfall([
-          function(done) {
-            // Récupérer l'utilisateur dans la base de données
-            models.User.findOne({
-              attributes: ['id', 'bio'],
-              where: { id: userId }
-            }).then(function (userFound) {
-              done(null, userFound);
-            })
-            .catch(function(err) {
-              return res.status(500).json({ 'error': 'unable to verify user' });
-            });
+    //     // Waterfall permet de simplifier les choses (optionnel)
+    //     asyncLib.waterfall([
+    //       function(done) {
+    //         // Récupérer l'utilisateur dans la base de données
+    //         models.User.findOne({
+    //           attributes: ['id', 'bio'],
+    //           where: { id: userId }
+    //         }).then(function (userFound) {
+    //           done(null, userFound);
+    //         })
+    //         .catch(function(err) {
+    //           return res.status(500).json({ 'error': 'unable to verify user' });
+    //         });
 
-          },
-          function(userFound, done) {
-            // Si l'utilisateur est trouvé
-            if(userFound) {
-              userFound.update({
-                bio: (bio ? bio : userFound.bio)
-              }).then(function() {
-                done(userFound);
-              }).catch(function(err) {
-                res.status(500).json({ 'error': 'cannot update user' });
-              });
-            } else {
-              res.status(404).json({ 'error': 'user not found' });
-            }
-          },
-        ], function(userFound) {
-          if (userFound) {
-            return res.status(201).json(userFound);
-          } else {
-            return res.status(500).json({ 'error': 'cannot update user profile' });
-          }
-        });
+    //       },
+    //       function(userFound, done) {
+    //         // Si l'utilisateur est trouvé
+    //         if(userFound) {
+    //           userFound.update({
+    //             bio: (bio ? bio : userFound.bio)
+    //           }).then(function() {
+    //             done(userFound);
+    //           }).catch(function(err) {
+    //             res.status(500).json({ 'error': 'cannot update user' });
+    //           });
+    //         } else {
+    //           res.status(404).json({ 'error': 'user not found' });
+    //         }
+    //       },
+    //     ], function(userFound) {
+    //       if (userFound) {
+    //         return res.status(201).json(userFound);
+    //       } else {
+    //         return res.status(500).json({ 'error': 'cannot update user profile' });
+    //       }
+    //     });
     
-    }
+    // }
 }
