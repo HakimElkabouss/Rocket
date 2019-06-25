@@ -4,26 +4,14 @@ var nodemailer = require('nodemailer');
 var configGmail = require('./configGmail');
 var apiRouter = require('./apiRouter').router;
 
+//On définit express dans notre constante "app"
 var app = express();
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use('/', apiRouter);
 
-app.get('/', function(req, res){
-  res.setHeader('Content-Type','text/html')
-  res.render('index.ejs');
-})
-app.get('/users/register', function(req, res){
-  res.setHeader('Content-Type','text/html')
-  res.render('register.ejs');
-})
-app.get('/users/login', function(req, res){
-  res.setHeader('Content-Type','text/html')
-  res.render('login.ejs');
-})
-app.get('/welcome', function(req,res){
-  res.render('welcome.ejs');
-})
+
 
 
 app.post('/newsletter', function(req, res, next) {
@@ -55,7 +43,7 @@ console.log('Message sent: ' + info.response);
 
 
 
-app.use('/', apiRouter);
+
 
 
 app.listen(3000, function(){

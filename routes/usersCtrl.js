@@ -22,7 +22,7 @@ module.exports = {
           return res.render('register.ejs',{error: 'you have cheated on the password confirmation'});
         }
         if(username.length >= 13 || username.length <= 4){
-            return res.render('register.ejs',{error: 'wrong username (must be length (5 - 12))'});
+            return res.render('register.ejs',{error: 'wrong username ( must be length (5 - 12) )'});
         }
         if(!EMAIL_REGEX.test(email)){
             return res.render('register.ejs',{error: 'email is not valid'});
@@ -30,7 +30,8 @@ module.exports = {
         if(!PASSWORD_REGEX.test(password)){
             return res.render('register.ejs',{error: 'Password must be between 4 and 8 digits long and include at least one numeric digit'});
         }
-
+        
+        // Async est un module utilitaire qui fournit des fonctions simples et puissantes pour travailler avec du JavaScript asynchrone.
         // Waterfall permet de simplifier les choses (optionnel)
         asyncLib.waterfall([
             function(done) {
@@ -46,7 +47,6 @@ module.exports = {
                 return res.render('register.ejs',{ error: 'unable to verify user' });
               });
             },
-            // Si je trouve l'utilisateur
             function(userFound, done) {
                 // hasher le mot de passe
               if (!userFound) {
@@ -122,7 +122,7 @@ module.exports = {
             }
           ], function(userFound) {
             if (userFound) {
-              return res.render('welcome.ejs',{});
+              return res.redirect('/welcome');
             } else {
               return res.render('login.ejs',{ error: 'cannot log on user' });
             }
@@ -132,28 +132,28 @@ module.exports = {
           res.render('index.ejs')
       },
       
-    getUserProfile : function(req, res){
-        // récupérer en-tete de l'authorisation
-        var headerAuth = req.headers['authorization'];
-        var userId = jwtUtils.getUserId(headerAuth);
+    // getUserProfile : function(req, res){
+    //     // récupérer en-tete de l'authorisation
+    //     var headerAuth = req.headers['authorization'];
+    //     var userId = jwtUtils.getUserId(headerAuth);
 
-        if(userId < 0)
-            return res.status(400).json({'error': 'wrong token'});
+    //     if(userId < 0)
+    //         return res.status(400).json({'error': 'wrong token'});
 
-            models.User.findOne({
-                attributes: [ 'id', 'email', 'username' ],
-                where: { id: userId }
-              }).then(function(user) {
-                if (user) {
-                  res.status(201).json(user);
-                } else {
-                  res.status(404).json({ 'error': 'user not found' });
-                }
-              }).catch(function(err) {
-                res.status(500).json({ 'error': 'cannot fetch user' });
-          });
+    //         models.User.findOne({
+    //             attributes: [ 'id', 'email', 'username' ],
+    //             where: { id: userId }
+    //           }).then(function(user) {
+    //             if (user) {
+    //               res.status(201).json(user);
+    //             } else {
+    //               res.status(404).json({ 'error': 'user not found' });
+    //             }
+    //           }).catch(function(err) {
+    //             res.status(500).json({ 'error': 'cannot fetch user' });
+    //       });
     
-    },
+    // },
     // updateUserProfile: function(req, res){
     //     // récupérer en-tete de l'authorisation
     //     var headerAuth = req.headers['authorization'];
