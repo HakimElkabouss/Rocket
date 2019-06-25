@@ -2,14 +2,14 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var nodemailer = require('nodemailer');
 var configGmail = require('./configGmail');
-var apiRouter = require('./apiRouter').router;
+var Routers = require('./Routers').router;
 
 //On définit express dans notre constante "app"
 var app = express();
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use('/', apiRouter);
+app.use('/', Routers);
 
 
 
