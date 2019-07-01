@@ -106,15 +106,15 @@ module.exports = {
             },
             function(userFound, done) {
               if (userFound) {
-                bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt) {
-                  done(null, userFound, resBycrypt);
+                bcrypt.compare(password, userFound.password, function(errBcrypt, resBcrypt) {
+                  done(null, userFound, resBcrypt);
                 });
               } else {
                 return res.render('login.ejs',{ error: 'user not exist' });
               }
             },
-            function(userFound, resBycrypt, done) {
-              if(resBycrypt) {
+            function(userFound, resBcrypt, done) {
+              if(resBcrypt) {
                 done(userFound);
               } else {
                 return res.render('login.ejs',{ error: 'invalid password' });

@@ -23,24 +23,5 @@ exports.router = (function(){
 
 
 
-
-
-
-
-
-
-
-    // apiRouter.route('/users/me/').get(usersCtrl.getUserProfile);
-    // apiRouter.route('/users/me/').put(usersCtrl.updateUserProfile);
-
-
-    // Messages Routes
-    Routers.route('/messages/new/').post(messagesCtrl.createMessage);
-    Routers.route('/messages/').get(messagesCtrl.listMessages);
-
-    // Likes Routes
-    Routers.route('/message/:messageId/vote/like').post(likesCtrl.likePost);
-    Routers.route('/message/:messageId/vote/dislike').post(likesCtrl.dislikePost);
-
     return Routers;
 })();
