@@ -18,11 +18,19 @@ module.exports = {
       },
       password: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING 
       },
       isAdmin: {
         allowNull: false,
         type: Sequelize.BOOLEAN
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },

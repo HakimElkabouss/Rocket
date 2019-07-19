@@ -1,5 +1,5 @@
 var bcrypt = require('bcrypt');
-var jwtUtils = require('../utils/jwt.utils');
+// var jwtUtils = require('../utils/jwt.utils');
 var models = require('../models');
 var asyncLib = require('async');
 
@@ -34,55 +34,54 @@ module.exports = {
         // Async est un module utilitaire qui fournit des fonctions simples et puissantes pour travailler avec du JavaScript asynchrone.
         // Waterfall permet de simplifier les choses (optionnel)
         asyncLib.waterfall([
-            function(done) {
-                // Vérifier si l'utilisateur est présent dans la base de données
-              models.User.findOne({
-                attributes: ['email'],
-                where: { email: email }
-              })
-              .then(function(userFound) {
-                done(null, userFound);
-              })
-              .catch(function(err) {
-                return res.render('register.ejs',{ error: 'unable to verify user' });
+          function(done) {
+            // Vérifier si l'utilisateur est présent dans la base de données
+            models.User.findOne({
+              attributes: ['email'],
+              where: { email: email }
+            })
+            .then(function(userFound) {
+              done(null, userFound);
+            })
+            .catch(function(err) {
+              return res.render('register.ejs',{ error: 'unable to verify user' });
+            });
+          },
+          function(userFound, done) {
+            // hasher le mot de passe
+            if (!userFound) {
+              bcrypt.hash(password, 5, function( err, bcryptedPassword ) {
+                done(null, userFound, bcryptedPassword);
               });
-            },
-            function(userFound, done) {
-                // hasher le mot de passe
-              if (!userFound) {
-                bcrypt.hash(password, 5, function( err, bcryptedPassword ) {
-                  done(null, userFound, bcryptedPassword);
-                });
-                // si l'utilisateur est déjà saisie dans la base de données
-              } else {
-                return res.render('register.ejs',{ error: 'user already exist' });
-              }
-            },
-            // sinon faut le créer a nouveau 
-            function(userFound, bcryptedPassword, done) {
-                // saisir un nouveau utilisateur
-              var newUser = models.User.create({
-                email: email,
-                username: username,
-                password: bcryptedPassword,
-                isAdmin: 0
-              })
-              .then(function(newUser) {
-                done(newUser);
-              })
-              .catch(function(err) {
-                return res.render('register.ejs',{ error: 'cannot add user' });
-              });
-            }
-          ], function(newUser) {
-            if (newUser) {
-              return res.render('login.ejs');
+              // si l'utilisateur est déjà saisie dans la base de données
             } else {
-              return res.render('register.ejs',{ error: 'cannot add user' });
+              return res.render('register.ejs',{ error: 'user already exist' });
             }
-          });
-      
-    },
+          },
+          // sinon faut le créer a nouveau
+          function(userFound, bcryptedPassword, done) {
+            // saisir un nouveau utilisateur
+            var newUser = models.User.create({
+              email: email,
+              username: username,
+              password: bcryptedPassword,
+              isAdmin: 0
+            })
+            .then(function(newUser) {
+              done(newUser);
+            })
+            .catch(function(err) {
+              return res.render('register.ejs',{ error: 'cannot add user' });
+            });
+          }
+        ], function(newUser) {
+          if (newUser) {
+            return res.render('login.ejs');
+          } else {
+            return res.render('register.ejs',{ error: 'cannot add user' });
+          }
+        });
+      },
     login : function(req, res){
         var email = req.body.email;
         var password = req.body.password;
@@ -106,15 +105,15 @@ module.exports = {
             },
             function(userFound, done) {
               if (userFound) {
-                bcrypt.compare(password, userFound.password, function(errBcrypt, resBcrypt) {
-                  done(null, userFound, resBcrypt);
+                bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt) {
+                  done(null, userFound, resBycrypt);
                 });
               } else {
                 return res.render('login.ejs',{ error: 'user not exist' });
               }
             },
-            function(userFound, resBcrypt, done) {
-              if(resBcrypt) {
+            function(userFound, resBycrypt, done) {
+              if(resBycrypt) {
                 done(userFound);
               } else {
                 return res.render('login.ejs',{ error: 'invalid password' });
@@ -132,72 +131,4 @@ module.exports = {
           res.render('index.ejs')
       },
       
-    // getUserProfile : function(req, res){
-    //     // récupérer en-tete de l'authorisation
-    //     var headerAuth = req.headers['authorization'];
-    //     var userId = jwtUtils.getUserId(headerAuth);
-
-    //     if(userId < 0)
-    //         return res.status(400).json({'error': 'wrong token'});
-
-    //         models.User.findOne({
-    //             attributes: [ 'id', 'email', 'username' ],
-    //             where: { id: userId }
-    //           }).then(function(user) {
-    //             if (user) {
-    //               res.status(201).json(user);
-    //             } else {
-    //               res.status(404).json({ 'error': 'user not found' });
-    //             }
-    //           }).catch(function(err) {
-    //             res.status(500).json({ 'error': 'cannot fetch user' });
-    //       });
-    
-    // },
-    // updateUserProfile: function(req, res){
-    //     // récupérer en-tete de l'authorisation
-    //     var headerAuth = req.headers['authorization'];
-    //     var userId = jwtUtils.getUserId(headerAuth);
-
-    //     // params
-    //     var bio = req.body.bio;
-
-    //     // Waterfall permet de simplifier les choses (optionnel)
-    //     asyncLib.waterfall([
-    //       function(done) {
-    //         // Récupérer l'utilisateur dans la base de données
-    //         models.User.findOne({
-    //           attributes: ['id', 'bio'],
-    //           where: { id: userId }
-    //         }).then(function (userFound) {
-    //           done(null, userFound);
-    //         })
-    //         .catch(function(err) {
-    //           return res.status(500).json({ 'error': 'unable to verify user' });
-    //         });
-
-    //       },
-    //       function(userFound, done) {
-    //         // Si l'utilisateur est trouvé
-    //         if(userFound) {
-    //           userFound.update({
-    //             bio: (bio ? bio : userFound.bio)
-    //           }).then(function() {
-    //             done(userFound);
-    //           }).catch(function(err) {
-    //             res.status(500).json({ 'error': 'cannot update user' });
-    //           });
-    //         } else {
-    //           res.status(404).json({ 'error': 'user not found' });
-    //         }
-    //       },
-    //     ], function(userFound) {
-    //       if (userFound) {
-    //         return res.status(201).json(userFound);
-    //       } else {
-    //         return res.status(500).json({ 'error': 'cannot update user profile' });
-    //       }
-    //     });
-    
-    // }
-}
+    }
