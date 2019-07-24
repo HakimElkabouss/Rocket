@@ -1,0 +1,43 @@
+<style>
+    #customers {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: rgb(116, 116, 240);
+  color: white;
+}
+    </style>
+    <center><h1> Manage Users</h1></center>
+<table id="customers">
+    <tr>
+        <th>id</th>
+        <th>email</th>
+        <th>username</th>
+        <th></th>
+    </tr>
+    <% user.forEach(function(item) { %>
+    <tr>
+        <td><%= item.id %></td>
+        <td><%= item.email %></td>
+        <td><%= item.username %></td>
+        <td>
+            <a href="/delete?id=<%= item.id%>" onclick="return confirm('Are you sure ?')">Delete</a>
+        </td>
+    </tr>
+    <% }); %>
+</table>
