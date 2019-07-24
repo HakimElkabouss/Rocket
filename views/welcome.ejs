@@ -37,32 +37,45 @@
         #barre, #statut{
             display: inline-block;
         }
-        #actualités iframe{
+        #actualités, #news, #weather{
             margin-top: 80px;
             display: block;
-            width: 400px;
+            width: 70%;
+        }
+        #actualités, #gps{
+            margin-top: 50px;
+            display: block;
+            width: 80%;
+            margin-bottom: 50px;
         }
     </style>
 </head>
 <body>
     <a href="/"  id="btnOut"><button type="submit" class="btn btn-warning btn-lg" style="margin-top: 20px;" ><span class="fa fa-sign-out"></span> Logout</button></a>
     <div id="barre">
-        <img src="images/user.png">
+        <img src="/images/user.png">
         <!-- <iframe src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=small&timezone=Europe%2FParis"   frameborder="0"></iframe>  -->
         <IFRAME src="http://www.Heure.com/heure-fr.php?timezone=2&size=24"  BORDER="0" HSPACE="0" VSPACE="0" FRAMEBORDER="0" SCROLLING="no"> </IFRAME>
-    </div>
-    <div id="statut">
-        <form action="/post" method="POST">
-            <textarea class="form-control" rows="3" id="comment" style="resize: none;"></textarea>
-            <button class="btn btn-default btn-lg" onclick="send()" style="float: right; margin-top:30px;"><span class="fa fa-paper-plane"></span> Send</button>
-        </form>
         
     </div>
-    <div id="actualités">
-    <iframe src="https://fr.euronews.com/embed/timeline" scrolling="no" frameborder="0" style="min-height:425px; width:100%; height:100%;"></iframe>
-    <iframe src="//fr.euronews.com/embed/meteo/europe/france/paris" scrolling="no" frameborder="0" style="min-height:570px; width:100%; height:100%;"></iframe>
-    <iframe src="https://embed.waze.com/iframe?zoom=15&lat=48.856614&lon=2.352222&ct=livemap" width="600" height="450" allowfullscreen></iframe>
+    <div id="statut">
+        <form  method="post">
+            <input type="text" class="form-control" name="content" rows="3" id="content" style="resize: none;">
+            <input type="file" id="imageFile" name="attachment" accept="image/png, image/jpeg">
+            <button  class="btn btn-primary btn-lg"  style="float: right; margin-top:30px;"> Send</button>
+        </form> 
+        
+     </div>
+    <div id="publications">
+
     </div>
+<center>
+    <div id="actualités">
+    <iframe src="https://fr.euronews.com/embed/timeline" id="news" scrolling="no" frameborder="0" style="min-height:425px; width:100%; height:100%;"></iframe>
+    <iframe src="//fr.euronews.com/embed/meteo/europe/france/paris" id="weather" scrolling="no" frameborder="0" style="min-height:570px; width:100%; height:100%;"></iframe>
+    <iframe src="https://embed.waze.com/iframe?zoom=15&lat=48.856614&lon=2.352222&ct=livemap" id="gps" width="600" height="450" allowfullscreen></iframe>
+    </div>
+</center>
     <div id="footer">
         
         <section class="bg-dark text-center p-5 mt-4">
@@ -75,5 +88,6 @@
             </div>
         </section>
     </div>
+    <script src="front.js"></script>
 </body>
 </html>
