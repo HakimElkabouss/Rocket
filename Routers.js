@@ -10,6 +10,7 @@ exports.router = (function(){
     Routers.route('/users/register/').get(function(req,res){
         res.render('register.ejs');
     });
+    
     Routers.route('/users/login/').post(usersCtrl.login);
     Routers.route('/users/login/').get(function(req, res){
         res.render('login.ejs');
