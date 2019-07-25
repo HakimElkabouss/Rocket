@@ -26,6 +26,17 @@ connection.connect();
 app.set('view engine', 'ejs');
 
 
+// add a publication
+app.post('/welcome', function(req, res){
+   
+  connection.query("INSERT INTO messages SET ?", req.body, function(err){
+      if(err) throw err;
+
+      console.log("1 publication inserted");
+  });
+
+});
+
 // show users
 app.get('/admin', function(req, res, next){
   connection.query('SELECT * FROM users', function(err, rs){
@@ -49,16 +60,7 @@ app.get('/delete', function(req, res){
 // })
 
 
-// add a publication
-app.post('/welcome', function(req, res){
-   
-  connection.query("INSERT INTO messages SET ?", req.body, function(err, data){
-      if(err) throw err;
 
-      console.log("1 publication inserted");
-  });
-
-});
 
 // Newsletter
 app.post('/newsletter', function(req, res, next) {
